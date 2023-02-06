@@ -23,6 +23,11 @@ export const Component = (props) => {
     button_color: buttonColor,
     complete_todo_opacity: completeTodoOpacity,
   } = props;
+
+  console.log(props);
+
+  return <h1>Hello {props.serverSideProps.randomNumber}</h1>;
+
   return (
     <Layout>
       <Island
@@ -40,4 +45,10 @@ export const Component = (props) => {
 export { fields } from './fields.jsx';
 export const meta = {
   label: `Todo List Module`,
+};
+
+export const getServerSideProps = async () => {
+  return {
+    randomNumber: Math.random(),
+  };
 };
