@@ -1,4 +1,13 @@
 import { useState, useEffect } from 'react';
+import {
+  useIsServerRender,
+  usePageUrl,
+  useBaseName,
+} from '@hubspot/cms-components';
+import { Routes, Route, BrowserRouter, Link } from 'react-router-dom';
+import { StaticRouter } from 'react-router-dom/server';
+
+// Get this from the "partialName" added to the render context
 
 const PORTSMOUTH_HOURLY_URL =
   'https://api.weather.gov/gridpoints/GYX/63,28/forecast/hourly';
@@ -67,8 +76,8 @@ const Loading = () => {
   return 'Loading...';
 };
 
-export default function Forecast(props) {
-  const [forecastData, setForecastData] = useState(props.forecastData);
+const Home = () => {
+  const [forecastData, setForecastData] = useState(null);
 
   useEffect(() => {
     fetch(PORTSMOUTH_HOURLY_URL)
@@ -80,11 +89,58 @@ export default function Forecast(props) {
 
   return (
     <div>
-      <h2>
-        Hourly Forecast - Generated at{' '}
-        {calculateForecastGeneratedAt(forecastData)}
-      </h2>
-      {forecastData ? <Days {...forecastData.properties} /> : <Loading />}
+      <Link to="/test">Test</Link>
+
+      <div>
+        <h2>
+          Hourly Forecast - Generated at{' '}
+          {calculateForecastGeneratedAt(forecastData)}
+        </h2>
+        {forecastData ? <Days {...forecastData.properties} /> : <Loading />}
+      </div>
     </div>
   );
+};
+
+const Test = () => {
+  return (
+    <div>
+      <Link to="/">Home</Link>
+    </div>
+  );
+};
+
+const App = () => {
+  return (
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/test" element={<Test />} />
+    </Routes>
+  );
+};
+
+export default function Forecast() {
+  const isServerRender = useIsServerRender();
+  const pageUrl = usePageUrl();
+  const baseName = useBaseName();
+  let router;
+
+  console.log('in Forecast', baseName);
+  console.log(pageUrl.pathname);
+
+  if (isServerRender) {
+    router = (
+      <StaticRouter basename={baseName} location={pageUrl.pathname}>
+        <App />
+      </StaticRouter>
+    );
+  } else {
+    router = (
+      <BrowserRouter basename={baseName}>
+        <App />
+      </BrowserRouter>
+    );
+  }
+
+  return router;
 }
