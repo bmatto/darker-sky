@@ -9,18 +9,17 @@
     "eslint": "^8.24.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-react": "^7.31.10",
-    "prettier": "^2.7.1",
-    "yarpm": "^1.2.0"
+    "prettier": "^2.7.1"
   },
   "scripts": {
     "start": "hs-cms-dev-server darker-sky-project/darker-sky-app",
     "lint:js": "eslint . --ext .js,.jsx",
     "prettier": "prettier . --check",
-    "postinstall": "cd darker-sky-project && cd darker-sky-app && yarpm install",
+    "postinstall": "cd darker-sky-project && cd darker-sky-app && npm install",
     "watch:hubl": "hs watch darker-sky-theme darker-sky-theme",
     "upload:hubl": "hs upload darker-sky-theme darker-sky-theme",
     "deploy": "hs project upload darker-sky-project",
-    "test": "cd darker-sky-project && cd darker-sky-app && yarpm run test"
+    "test": "cd darker-sky-project && cd darker-sky-app && npm run test"
   },
   "dependencies": {},
   "engines": {
